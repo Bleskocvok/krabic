@@ -8,35 +8,20 @@
 #include <stdlib.h>
 
 
-
-typedef struct
+void mk_ball(float* ball, float x, float y, float r)
 {
-    float x,
-          y,
-          prev_x,
-          prev_y,
-          radius;
-
-} ball_t;
-
-
-ball_t mk_ball(float x, float y, float r)
-{
-    return (ball_t)
-    {
-        .x = x,
-        .y = y,
-        .prev_x = x,
-        .prev_y = y,
-        .radius = r,
-    };
+    ball[X] = x;
+    ball[Y] = y;
+    ball[PREV_X] = x;
+    ball[PREV_Y] = y;
+    ball[RADIUS] = r;
 }
 
 
 int main()
 {
     vector_t balls;
-    vector_init(&balls, sizeof(ball_t));
+    vector_init(&balls, SIZE * sizeof(float));
 
     const int screen_w = 600;
     const int screen_h = 600;
@@ -46,8 +31,9 @@ int main()
     srand(1337);
     for (int i = 0; i < ball_count; i++)
     {
-        ball_t b = mk_ball(rand() % screen_w, rand() % screen_h, 10);
-        PUSH_STRUCT(&balls, &b);
+        float ball[SIZE] = { 0 };
+        mk_ball(ball, rand() % screen_w, rand() % screen_h, 10);
+        PUSH_STRUCT(&balls, &ball);
     }
 
 
@@ -73,8 +59,8 @@ int main()
 
         for (size_t i = 0; i < balls.count; i++)
         {
-            ball_t b = *(ball_t*)vector_at(&balls, i);
-            texture_draw(display, tex, b.radius * 2, b.x, b.y);
+            float* b = vector_at(&balls, i);
+            texture_draw(display, tex, b[RADIUS] * 2, b[X], b[Y]);
         }
 
         display_render(display);
