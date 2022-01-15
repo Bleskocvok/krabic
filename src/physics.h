@@ -9,6 +9,8 @@
 #define RADIUS 4
 #define SIZE 5
 
+#define ITERATIONS 100
+
 
 int physics_init();
 

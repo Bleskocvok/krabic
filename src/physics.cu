@@ -1,11 +1,16 @@
 
+extern "C" {
 #include "physics.h"
+}
 
 #include "solve.cu"
 
 #include <stdio.h>
 
 #include <curand.h>
+
+
+#define RESERVE 2000
 
 
 static size_t reserved = 0;
@@ -29,42 +34,49 @@ void reserve(size_t size)
 }
 
 
+extern "C" 
 int physics_init()
 {
     const int device = 0;
 
-    cudaError_t err = cudaSetDevice(device);
-    if (err != cudaSuccess)
     {
-        fprintf(stderr, "(CUDA) ERROR: cannot set CUDA device: %s\n",
-                        cudaGetErrorString(err));
-        return 1;
+        cudaError_t err = cudaSetDevice(device);
+        if (err != cudaSuccess)
+        {
+            fprintf(stderr, "(CUDA) ERROR: cannot set CUDA device: %s\n",
+                            cudaGetErrorString(err));
+            return 1;
+        }
     }
 
-    void* ptr = NULL;
-    cudaError_t err = cudaMalloc(&ptr, 1024);
-    if (err != cudaSuccess)
     {
-        fprintf(stderr, "(CUDA) ERROR: %s\n", cudaGetErrorString(err));
-        return 1;
+        void* ptr = NULL;
+        cudaError_t err = cudaMalloc(&ptr, 1024);
+        if (err != cudaSuccess)
+        {
+            fprintf(stderr, "(CUDA) ERROR: %s\n", cudaGetErrorString(err));
+            return 1;
+        }
     }
 
     cudaDeviceProp deviceProp;
     cudaGetDeviceProperties(&deviceProp, device);
     printf("(CUDA) Using device %d: '%s'\n", device, deviceProp.name);
 
-    reserve(10);
+    reserve(RESERVE);
 
     return 0;
 }
 
 
+extern "C" 
 void physics_quit()
 {
     cudaFree(d_balls);
 }
 
 
+extern "C" 
 void solve_circles(float* balls, int count,
                    float gravity,
                    float minx, float maxx,

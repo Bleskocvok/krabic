@@ -1,30 +1,46 @@
 
-CFLAGS += -std=c99 -Wall -Wextra -pedantic
+CFLAGS ?= -std=c99 -Wall -Wextra -pedantic -O2
+
+NVCCFLAGS ?= -O3
+
+NVCC = nvcc
 
 TARGET = krabic
+CUTARGET = cukrabic
+
+LDLIBS += -lSDL2 -lSDL2main -lm
 
 SRC = src/display.c \
-	  src/physics.c	\
-	  src/vector.c \
-	  src/main.c
+	src/vector.c \
+	src/main.c
 
 OBJ = $(patsubst src/%,obj/%, $(patsubst %.c,%.o,$(SRC)))
 
-DEPS = -lSDL2 -lSDL2main -lm
+
+all: $(CUTARGET) $(TARGET)
 
 
 #
-# Main targets
+# CPU targets
 #
 
-all: $(TARGET)
-
-$(TARGET): LDLIBS += $(DEPS)
-$(TARGET): $(OBJ)
+$(TARGET): $(OBJ) obj/physics.o
 	$(CC) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 obj/%.o: src/%.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+
+#
+# GPU targets
+#
+
+src/physics.cu: src/solve.cu ;
+
+cuda: distclean $(CUTARGET)
+
+$(CUTARGET): $(SRC) src/physics.cu
+	$(NVCC) $(NVCCFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 
 #
@@ -43,9 +59,9 @@ DEPEND = $(OBJ:.o=.d)
 #
 
 clean:
-	$(RM) $(OBJ) $(DEPEND)
+	$(RM) obj/*.o $(DEPEND)
 
 distclean: clean
-	$(RM) $(TARGET)
+	$(RM) $(TARGET) $(CUTARGET)
 
-.PHONY: all clean distclean
+.PHONY: all clean distclean cuda

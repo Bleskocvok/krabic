@@ -2,12 +2,15 @@
 #include "physics.h"
 
 #include <math.h>
+#include <stdio.h>
 
 
 int physics_init()
 {
+    printf("(CPU) Initialized physics\n");
     return 0;
 }
+
 
 void physics_quit()
 {  }
@@ -106,6 +109,6 @@ void solve_circles(float* balls, int count,
         apply_forces(ball, gravity);
     }
 
-    for (int j = 0; j < 100; j++)
+    for (int j = 0; j < ITERATIONS; j++)
         solve_collisions(balls, count, minx, maxx, miny, maxy);
 }

@@ -26,16 +26,16 @@ int main()
     const int screen_w = 600;
     const int screen_h = 600;
     const float gravity = 10;
-    const int ball_count = 200;
+    const float radius = 8;
+    const int ball_count = 1000;
 
     srand(1337);
     for (int i = 0; i < ball_count; i++)
     {
         float ball[SIZE] = { 0 };
-        mk_ball(ball, rand() % screen_w, rand() % screen_h, 10);
+        mk_ball(ball, rand() % screen_w, rand() % screen_h, radius);
         PUSH_STRUCT(&balls, &ball);
     }
-
 
     display_t* display;
 
