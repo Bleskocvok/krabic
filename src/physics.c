@@ -53,8 +53,8 @@ static void collision(const float* a, const float* b, float* result)
 
     float dist = sqrt(dx * dx + dy * dy);
 
-    float diff_x = (dist - d) / dist;
-    float diff_y = (dist - d) / dist;
+    float diff_x = dist == 0 ? d / 4 : (dist - d) / dist;
+    float diff_y = dist == 0 ? d / 4 : (dist - d) / dist;
 
     result[0] -= dx * diff_x * 0.5;
     result[1] -= dy * diff_y * 0.5;
