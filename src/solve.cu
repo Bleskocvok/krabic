@@ -29,6 +29,10 @@ void apply_forces(float* ball, const float gravity)
     ball[Y] += dy;
 
     ball[Y] += gravity * 0.003;
+
+    float r = ball[RADIUS];
+    ball[X] = clamp(ball[X], 0 + r, 600 - r);
+    ball[Y] = clamp(ball[Y], 0 + r, 600 - r);
 }
 
 
@@ -75,10 +79,11 @@ void solve_collisions(float* balls, int count,
 
     __syncthreads();
 
-    float r = ball[RADIUS];
-
-    ball[X] = clamp(ball[X] + coords[0], minx + r, maxx - r);
-    ball[Y] = clamp(ball[Y] + coords[1], miny + r, maxy - r);
+    // float r = ball[RADIUS];
+    // ball[X] = clamp(ball[X] + coords[0], minx + r, maxx - r);
+    // ball[Y] = clamp(ball[Y] + coords[1], miny + r, maxy - r);
+    ball[X] += coords[0];
+    ball[Y] += coords[1];
 }
 
 
