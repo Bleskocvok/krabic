@@ -26,8 +26,8 @@ int main()
     const int screen_w = 600;
     const int screen_h = 600;
     const float gravity = 10;
-    const float radius = 8;
-    const int ball_count = 1000;
+    const float radius = 4;
+    const int ball_count = 2000;
 
     srand(1337);
     for (int i = 0; i < ball_count; i++)
@@ -49,6 +49,10 @@ int main()
 
     if (physics_init() != 0)
         return EXIT_FAILURE;
+
+    // wait for ESCAPE
+    while (!has_quit(display))
+    {  }
 
     while (!has_quit(display))
     {
