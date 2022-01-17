@@ -144,10 +144,10 @@ void texture_draw(display_t* display,
                   float y)
 {
     SDL_Rect rect;
-    rect.x = x - radius / 2;
-    rect.y = y - radius / 2;
-    rect.w = radius;
-    rect.h = radius;
+    rect.x = round(x - radius / 2);
+    rect.y = round(y - radius / 2);
+    rect.w = round(radius);
+    rect.h = round(radius);
     SDL_RenderCopy(display->renderer, tex->texture, NULL, &rect);
 }
 
