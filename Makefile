@@ -1,5 +1,5 @@
 
-CFLAGS ?= -std=c99 -Wall -Wextra -pedantic -O2
+CFLAGS ?= -std=c11 -Wall -Wextra -pedantic -O2
 
 NVCCFLAGS ?= -O3
 

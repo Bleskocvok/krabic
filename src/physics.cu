@@ -34,7 +34,7 @@ void reserve(size_t size)
 }
 
 
-extern "C" 
+extern "C"
 int physics_init()
 {
     const int device = 0;
@@ -69,14 +69,14 @@ int physics_init()
 }
 
 
-extern "C" 
+extern "C"
 void physics_quit()
 {
     cudaFree(d_balls);
 }
 
 
-extern "C" 
+extern "C"
 void solve_circles(float* balls, int count,
                    float gravity,
                    float minx, float maxx,

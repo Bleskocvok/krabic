@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 void mk_ball(float* ball, float x, float y, float r)
@@ -51,13 +52,27 @@ int main()
         return EXIT_FAILURE;
 
     // wait for ESCAPE
-    while (!has_quit(display))
-    {  }
+    // while (!has_quit(display))
+    // {  }
 
     while (!has_quit(display))
     {
+        struct timespec beg;
+        struct timespec end;
+        timespec_get(&beg, TIME_UTC);
+
         solve_circles(balls.data, balls.count, gravity,
                       0, screen_w, 0, screen_h);
+
+        timespec_get(&end, TIME_UTC);
+
+        // double time = end.tv_sec * 1000.0 + end.tv_nsec * 1e-6
+        //             - beg.tv_sec * 1000.0 - beg.tv_nsec * 1e-6;
+
+        double time = end.tv_sec * 1000.0 - beg.tv_sec * 1000.0
+                    + end.tv_nsec * 1e-6  - beg.tv_nsec * 1e-6;
+
+        printf("ms: %f\n", time);
 
         display_clear(display);
 
